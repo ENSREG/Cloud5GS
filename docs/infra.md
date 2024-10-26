@@ -78,3 +78,6 @@ To clean up the resources created by Terraform, you can run the `terraform destr
 ```sh
 terraform destroy
 ```
+
+## References
+- [Microsoft learn](https://learn.microsoft.com/zh-tw/azure/aks/learn/quick-kubernetes-deploy-terraform?pivots=development-environment-azure-cli)
