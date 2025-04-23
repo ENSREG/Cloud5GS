@@ -1,0 +1,3 @@
+infra/.terrafor*
+infra/*.tfplan
+infra/*.tfstate
