@@ -12,9 +12,9 @@ This project try to leverages the free5GC and Azure to build the scalable, obser
 - `src`: collects all of dependencies.
 - `docs`: technical documents.
 
-## Requirements
+## Prerequisites
 
-1. Terraform
+1\. Terraform
 
 Use the following command to install terraform on your system:
 ```
@@ -23,19 +23,101 @@ sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(l
 sudo apt-get update && sudo apt-get install terraform
 ```
 
-2. Azure CLI
+2\. Azure CLI
 
 Use the following command to install Azure CLI on your system:
 ```
 $ curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 ```
 
-3. Kubectl
+3\. Ensure SSH key pair exists at `~/.ssh/id_rsa_azure.pub`
+
+If you don't have an SSH key pair, generate one using the following command:
+```
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa_azure
+```
+
+4\. [Optional] Kubectl
 
 Use the following command to install kubectl on your system:
 ```
 $ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+```
+
+## Deploy the Azure VM
+
+### Usage
+
+1. Initialize Terraform:
+   ```
+   terraform init
+   ```
+
+2. Preview changes:
+   ```
+   terraform plan
+   ```
+
+3. Apply changes:
+   ```
+   terraform apply
+   ```
+
+4. To delete all resources:
+   ```
+   terraform destroy
+   ```
+
+### Customization
+
+You can customize the configuration by editing the `variables.tf` file or by using the `-var` parameter when executing terraform commands:
+
+```
+terraform apply -var="vm_name=my-custom-vm" -var="vm_size=Standard_DS2_v2"
+```
+
+### [Optional] Register the resource provider
+If you encounter the error like this during the `terraform plan` step:
+```
+╷
+│ Error: Encountered an error whilst ensuring Resource Providers are registered.
+│ 
+│ Terraform automatically attempts to register the Azure Resource Providers it supports, to
+│ ensure it is able to provision resources.
+│ 
+│ If you don't have permission to register Resource Providers you may wish to disable this
+│ functionality by adding the following to the Provider block:
+│ 
+│ provider "azurerm" {
+│   "resource_provider_registrations = "none"
+│ }
+│ 
+│ Please note that if you opt out of Resource Provider Registration and Terraform tries
+│ to provision a resource from a Resource Provider which is unregistered, then the errors
+│ may appear misleading - for example:
+│ 
+│ > API version 2019-XX-XX was not found for Microsoft.Foo
+│ 
+│ Could suggest that the Resource Provider "Microsoft.Foo" requires registration, but
+│ this could also indicate that this Azure Region doesn't support this API version.
+│ 
+│ More information on the "resource_provider_registrations" property can be found here:
+│ https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs#resource_provider_registrations
+│ 
+│ Encountered the following errors:
+```
+This error indicates that the resource provider is not registered in your Azure subscription. You can register the resource provider by running the following command:
+```
+$ az provider list --query "[?registrationState!='Registered'].{Provider:namespace, State:registrationState}" -o table # check the registration state
+$ az provider register --namespace Microsoft.AzureTerraform
+```
+
+## Deploy the free5GC on Azure VM
+
+After the Azure VM is created, you can SSH into the VM using the following command:
+```
+$ ssh -i ~/.ssh/id_rsa_azure ubuntu@<public_ip_address>
 ```
 
 ## Deploy the AKS cluster
@@ -91,42 +173,6 @@ $ az aks list \
   --output table
 ----------------------
 cluster-pleasing-drake
-```
-
-### [Optional] Register the resource provider
-If you encounter the error like this during the `terraform plan` step:
-```
-╷
-│ Error: Encountered an error whilst ensuring Resource Providers are registered.
-│ 
-│ Terraform automatically attempts to register the Azure Resource Providers it supports, to
-│ ensure it is able to provision resources.
-│ 
-│ If you don't have permission to register Resource Providers you may wish to disable this
-│ functionality by adding the following to the Provider block:
-│ 
-│ provider "azurerm" {
-│   "resource_provider_registrations = "none"
-│ }
-│ 
-│ Please note that if you opt out of Resource Provider Registration and Terraform tries
-│ to provision a resource from a Resource Provider which is unregistered, then the errors
-│ may appear misleading - for example:
-│ 
-│ > API version 2019-XX-XX was not found for Microsoft.Foo
-│ 
-│ Could suggest that the Resource Provider "Microsoft.Foo" requires registration, but
-│ this could also indicate that this Azure Region doesn't support this API version.
-│ 
-│ More information on the "resource_provider_registrations" property can be found here:
-│ https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs#resource_provider_registrations
-│ 
-│ Encountered the following errors:
-```
-This error indicates that the resource provider is not registered in your Azure subscription. You can register the resource provider by running the following command:
-```
-$ az provider list --query "[?registrationState!='Registered'].{Provider:namespace, State:registrationState}" -o table # check the registration state
-$ az provider register --namespace Microsoft.AzureTerraform
 ```
 
 ### Set up the kubectl
