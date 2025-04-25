@@ -1,7 +1,7 @@
 # Deploy free5GC on Azure
-Build 5G Core Network (free5GC) on Azure platform from scratch.
-
 <img src="./assets/mvp.tif" width="100" alt="MVP architecture diagram">
+
+Build 5G Core Network (free5GC) on Azure platform from scratch.
 
 ## Project goal
 
@@ -11,7 +11,6 @@ This project try to leverages the free5GC and Azure to build the scalable, obser
 - `helm`: collects all of kubernetes deployment scripts.
 - `ansible`: collects all of ansible deployment scripts.
 - `src`: collects all of dependencies.
-- `docs`: technical documents.
 
 ## Prerequisites
 
@@ -138,7 +137,7 @@ This project provides a complete solution to deploy the free5GC on Azure. The te
 
 However, please note that the free5GC is for Research and educational purposes only. It is not intended for production use, the differences between the free5GC and commercial 5G core network (i.e. Saviah5G Core) are listed below:
 
-| Feature | free5GC | Saviah5GC |
+| Feature | [free5GC](https://free5gc.org/) | [Saviah5GC](https://saviah.com/en/contact) |
 | ------- | ------- | --------- |
 | Functionality | Basic 5G core network functions | Commercial grade 5G core network functions (be verified by [landslide](https://www.paralink.com.tw/index.php?tpl=news_info&id=370&lang=tw)) |
 | OAM | Webconsole with basic features | Secured and Reliable OAM system with various features |
@@ -148,7 +147,7 @@ However, please note that the free5GC is for Research and educational purposes o
 | Network Management | No | 1. Deploy a new nework slice in seconds 2. Change the NF configuration in runtime |
 | Customization | Limited | Highly customizable depending on the customer needs |
 | Deployment variety | Limited | Multiple deployment options (All In One/Public Cloud/Hybrid Cloud/On Premise) |
-| Real World Use Cases | Limited | Saviah5GC has been deployed in various real world use cases, such as 5G private network, Telecom Technology Center, Portable P5G, 5G MR/VR, Smart Agriculture, Smart Manufacturing, Smart Media & Entertainment, Smart Port, Smart Healthcare , etc. |
+| Real World Use Cases | Limited | Saviah5GC has been deployed in various real world use cases, such as 5G private network, Telecom Technology Center, Portable P5G, 5G MR/VR, Smart Agriculture, Smart Manufacturing, Smart Media & Entertainment, Smart Port, Smart Healthcare, etc. |
 
 <!-- If you have a request for production use, please contact us at [ -->
 
