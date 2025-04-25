@@ -1,7 +1,7 @@
 # Deploy free5GC on Azure
 Build 5G Core Network (free5GC) on Azure platform from scratch.
 
-![](./assets/mvp.tif)
+<img src="./assets/mvp.tif" width="100" alt="MVP architecture diagram">
 
 ## Project goal
 
