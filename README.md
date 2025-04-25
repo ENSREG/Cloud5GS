@@ -1,16 +1,14 @@
-# Deploy free5GC on Azure
+# Cloud5GS: Operate your own 5GS on Azure platform from scratch
 <img src="./assets/mvp.tif" width="100" alt="MVP architecture diagram">
 
-Build 5G Core Network (free5GC) on Azure platform from scratch.
+This document provides a comprehensive guide to deploying the free5GC on Azure using Terraform and Ansible. The project is designed to be easy to use and customizable, so you can modify the configuration to suit your needs.
 
 ## Project goal
 
 This project try to leverages the free5GC and Azure to build the scalable, observable, and stable cloud-native 5GC service.
 - `infra_aks`: collects the terraform script to build the AKS stack.
 - `infra`: collects the terraform script to build the Azure stack.
-- `helm`: collects all of kubernetes deployment scripts.
 - `ansible`: collects all of ansible deployment scripts.
-- `src`: collects all of dependencies.
 
 ## Prerequisites
 
@@ -130,6 +128,36 @@ $ ssh -i ~/.ssh/id_rsa_azure ubuntu@<public_ip_address>
 ```
 
 Please refer to the [ansible playbook](./ansible/README.md) for the detailed instructions on how to deploy the free5GC on the Azure VM.
+After the deployment is complete, you can check the status of the free5GC by running the following command:
+```
+$ ssh ubuntu@<VM_IP> -i ~/.ssh/id_rsa_azure
+$ kubectl get pod
+```
+And the output should look like this:
+```
+NAME                                                 READY   STATUS    RESTARTS   AGE
+free5gc-free5gc-amf-amf-79755fccc8-nlxkx             1/1     Running   0          13m
+free5gc-free5gc-ausf-ausf-758c7b4fdf-hknzw           1/1     Running   0          13m
+free5gc-free5gc-chf-chf-7977c5f888-qpnqd             1/1     Running   0          13m
+free5gc-free5gc-dbpython-dbpython-54d7bfd545-q8vpb   1/1     Running   0          13m
+free5gc-free5gc-nef-nef-7966dbd4d5-ch67v             1/1     Running   0          13m
+free5gc-free5gc-nrf-nrf-749d7cc489-b7h4s             1/1     Running   0          13m
+free5gc-free5gc-nssf-nssf-84566bf45f-lvd2s           1/1     Running   0          13m
+free5gc-free5gc-pcf-pcf-6cc546dd6b-vgdbg             1/1     Running   0          13m
+free5gc-free5gc-smf-smf-9f4c9bccd-7jmrj              1/1     Running   0          13m
+free5gc-free5gc-udm-udm-546cdb7bdf-5p8pt             1/1     Running   0          13m
+free5gc-free5gc-udr-udr-688464b9ff-mmhz9             1/1     Running   0          13m
+free5gc-free5gc-upf-upf1-75fc94bd95-fw2s2            1/1     Running   0          13m
+free5gc-free5gc-upf-upf2-59fd5c4787-l76wn            1/1     Running   0          13m
+free5gc-free5gc-upf-upfb-5b8797df5c-fxppz            1/1     Running   0          13m
+free5gc-free5gc-webui-webui-6586f86fcf-r6qdv         1/1     Running   0          13m
+mongodb-0                                            1/1     Running   0          13m
+```
+
+In addition, you should be able to access the free5GC web UI by navigating to `http://<public_ip_address>:30500` in your web browser. The default username is `admin`, and the password is `free5gc`.
+
+![](./assets/oam-1.png)
+![](./assets/oam-2.png)
 
 ## Conclusion
 
