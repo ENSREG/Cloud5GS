@@ -9,6 +9,7 @@ This project try to leverages the free5GC and Azure to build the scalable, obser
 - `infra_aks`: collects the terraform script to build the AKS stack.
 - `infra`: collects the terraform script to build the Azure stack.
 - `helm`: collects all of kubernetes deployment scripts.
+- `ansible`: collects all of ansible deployment scripts.
 - `src`: collects all of dependencies.
 - `docs`: technical documents.
 
@@ -46,6 +47,15 @@ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 ```
 
 ## Deploy the Azure VM
+
+The terraform script in this project is used to deploy the Azure VM. The terraform script is located in the `infra` directory. The terraform script is used to create the following resources:
+- Resource group: A logical container for Azure resources.
+- Virtual network: A private network in Azure.
+- Subnet: A range of IP addresses in the virtual network.
+- Network security group: A firewall that controls inbound and outbound traffic to the virtual network.
+- Public IP address: An IP address that is accessible from the internet, it is used to access the Azure VM via SSH protocol.
+- Network interface: A virtual network interface card that connects the Azure VM to the virtual network.
+- Virtual machine: An on-demand, scalable computing resource that is used to run the free5GC.
 
 ### Usage
 
@@ -119,6 +129,8 @@ After the Azure VM is created, you can SSH into the VM using the following comma
 ```
 $ ssh -i ~/.ssh/id_rsa_azure ubuntu@<public_ip_address>
 ```
+
+Please refer to the [ansible playbook](./ansible/README.md) for the detailed instructions on how to deploy the free5GC on the Azure VM.
 
 ## Deploy the AKS cluster
 
