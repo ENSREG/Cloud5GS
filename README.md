@@ -127,6 +127,11 @@ After the Azure VM is created, you can SSH into the VM using the following comma
 $ ssh -i ~/.ssh/id_rsa_azure ubuntu@<public_ip_address>
 ```
 
+In this guide, we will use the ansible playbook to install all of required tools on the Azure VM, including:
+- MicroK8s and enable the required addons (i.e. dns, rbac, storage, multus)
+- GTP5G and its dependencies
+- free5GC-Helm
+
 Please refer to the [ansible playbook](./ansible/README.md) for the detailed instructions on how to deploy the free5GC on the Azure VM.
 After the deployment is complete, you can check the status of the free5GC by running the following command:
 ```
