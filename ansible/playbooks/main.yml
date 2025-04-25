@@ -11,3 +11,6 @@
 
     - name: Import Helm installation tasks
       import_tasks: tasks/install_helm.yml
+    
+    - name: Import gtp5g installation tasks
+      import_tasks: tasks/install_gtp5g.yml

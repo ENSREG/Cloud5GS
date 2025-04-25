@@ -1,0 +1,37 @@
+---
+- name: Check if gtp5g is already installed
+  shell: lsmod | grep gtp5g || true
+  register: gtp5g_check
+  changed_when: false
+
+- name: Install git and build dependencies
+  apt:
+    name:
+      - git
+      - build-essential
+      - linux-headers-generic
+    state: present
+  become: true
+  when: gtp5g_check.stdout == ""
+
+- name: Clone gtp5g repository
+  git:
+    repo: https://github.com/free5gc/gtp5g.git
+    dest: /tmp/gtp5g
+    force: yes
+  when: gtp5g_check.stdout == ""
+
+- name: Build gtp5g
+  shell: cd /tmp/gtp5g && make
+  when: gtp5g_check.stdout == ""
+
+- name: Install gtp5g
+  shell: cd /tmp/gtp5g && make install
+  become: true
+  when: gtp5g_check.stdout == ""
+
+- name: Clean up
+  file:
+    path: /tmp/gtp5g
+    state: absent
+  when: gtp5g_check.stdout == ""
