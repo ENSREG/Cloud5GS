@@ -35,7 +35,7 @@
 
 - name: Create .kube directory
   file:
-    path: "{{ ansible_env.HOME }}/.kube"
+    path: "/home/{{ ansible_user }}/.kube"
     state: directory
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
@@ -43,15 +43,15 @@
   become: no
 
 - name: Create kubectl config file
-  command: microk8s config > {{ ansible_env.HOME }}/.kube/config
+  shell: microk8s config > /home/{{ ansible_user }}/.kube/config
   args:
-    creates: "{{ ansible_env.HOME }}/.kube/config"
+    creates: "/home/{{ ansible_user }}/.kube/config"
   become: no
   changed_when: true
 
 - name: Set correct permissions for kubectl config file
   file:
-    path: "{{ ansible_env.HOME }}/.kube/config"
+    path: "/home/{{ ansible_user }}/.kube/config"
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
     mode: '0600'
