@@ -1,3 +1,7 @@
 infra/.terrafor*
-infra/*.tfplan
-infra/*.tfstate
+infra/*.tfplan*
+infra/*.tfstate*
+
+infra_aks/.terrafor*
+infra_aks/*.tfplan*
+infra_aks/*.tfstate*

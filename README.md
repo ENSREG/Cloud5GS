@@ -1,4 +1,4 @@
-# Deploy free5GC on Azure Kubernetes Service
+# Deploy free5GC on Azure
 Build 5G Core Network (free5GC) on Azure platform from scratch.
 
 ![](./assets/mvp.tif)
@@ -6,7 +6,8 @@ Build 5G Core Network (free5GC) on Azure platform from scratch.
 ## Project goal
 
 This project try to leverages the free5GC and Azure to build the scalable, observable, and stable cloud-native 5GC service.
-- `infra`: collects the terraform script to build the AKS stack.
+- `infra_aks`: collects the terraform script to build the AKS stack.
+- `infra`: collects the terraform script to build the Azure stack.
 - `helm`: collects all of kubernetes deployment scripts.
 - `src`: collects all of dependencies.
 - `docs`: technical documents.
@@ -39,6 +40,8 @@ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
 ## Deploy the AKS cluster
 
+> **Note**: The original idea of this project is to deploy the free5GC on AKS. However, the AKS does not support the Multus CNI plugin, which is required by the free5GC. Therefore, we need to deploy the free5GC on the Azure VM instead of AKS. The terraform script in this project is only for reference and may not work as expected.
+
 To initialize the terraform script, you need to set up the Azure credentials. You can do this by running the following command:
 ```
 $ az login
@@ -61,7 +64,7 @@ Select a subscription and tenant (Type a number or Enter for no changes):
 
 After selecting the subscription, you can initialize the terraform script by running the following command:
 ```
-$ cd infra
+$ cd infra_aks
 $ terraform init -upgrade
 ```
 
@@ -126,7 +129,7 @@ $ az provider list --query "[?registrationState!='Registered'].{Provider:namespa
 $ az provider register --namespace Microsoft.AzureTerraform
 ```
 
-## Set up the kubectl
+### Set up the kubectl
 
 After the AKS cluster is created, you can set up the kubectl command-line tool to manage the cluster. You can do this by running the following command:
 ```
@@ -143,13 +146,11 @@ aks-agentpool-39294390-vmss000001   Ready    <none>   8m16s   v1.31.7
 aks-agentpool-39294390-vmss000002   Ready    <none>   9m23s   v1.31.7
 ```
 
-## Deploy the free5GC
-
-## Destroy the AKS cluster
+### Destroy the AKS cluster
 
 If you want to destroy the AKS cluster and all the resources created by terraform, you can run the following command:
 ```
-$ cd infra
+$ cd infra_aks
 $ terraform destroy
 ```
 This will destroy the AKS cluster and all the resources created by terraform.
