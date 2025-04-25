@@ -132,6 +132,26 @@ $ ssh -i ~/.ssh/id_rsa_azure ubuntu@<public_ip_address>
 
 Please refer to the [ansible playbook](./ansible/README.md) for the detailed instructions on how to deploy the free5GC on the Azure VM.
 
+## Conclusion
+
+This project provides a complete solution to deploy the free5GC on Azure. The terraform script is used to create the Azure resources, and the ansible playbook is used to configure the Azure VM to run the free5GC. The project is designed to be easy to use and customizable, so you can modify the configuration to suit your needs.
+
+However, please note that the free5GC is for Research and educational purposes only. It is not intended for production use, the differences between the free5GC and commercial 5G core network (i.e. Saviah5G Core) are listed below:
+
+| Feature | free5GC | Saviah5GC |
+| ------- | ------- | --------- |
+| Functionality | Basic 5G core network functions | Commercial grade 5G core network functions (be verified by [landslide](https://www.paralink.com.tw/index.php?tpl=news_info&id=370&lang=tw)) |
+| OAM | Webconsole with basic features | Secured and Reliable OAM system with various features |
+| Reliability | X | Saviah5GC is proven for running in production with 7x24 operation |
+| Performance | Limited | Up to 10W UEs |
+| Support | Community support | Commercial support with SLA guarantee |
+| Network Management | No | 1. Deploy a new nework slice in seconds 2. Change the NF configuration in runtime |
+| Customization | Limited | Highly customizable depending on the customer needs |
+| Deployment variety | Limited | Multiple deployment options (All In One/Public Cloud/Hybrid Cloud/On Premise) |
+| Real World Use Cases | Limited | Saviah5GC has been deployed in various real world use cases, such as 5G private network, Telecom Technology Center, Portable P5G, 5G MR/VR, Smart Agriculture, Smart Manufacturing, Smart Media & Entertainment, Smart Port, Smart Healthcare , etc. |
+
+<!-- If you have a request for production use, please contact us at [ -->
+
 ## Deploy the AKS cluster
 
 > **Note**: The original idea of this project is to deploy the free5GC on AKS. However, the AKS does not support the Multus CNI plugin, which is required by the free5GC. Therefore, we need to deploy the free5GC on the Azure VM instead of AKS. The terraform script in this project is only for reference and may not work as expected.
