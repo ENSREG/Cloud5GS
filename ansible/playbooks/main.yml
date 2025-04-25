@@ -3,14 +3,19 @@
   hosts: azure_vms
   become: yes
   tasks:
-    # - name: Import package installation tasks
-    #   import_tasks: tasks/install_packages.yml
+    - name: Import package installation tasks
+      import_tasks: tasks/install_packages.yml
 
-    # - name: Import microk8s installation tasks
-    #   import_tasks: tasks/install_microk8s.yml
+    - name: Import microk8s installation tasks
+      import_tasks: tasks/install_microk8s.yml
 
-    # - name: Import Helm installation tasks
-    #   import_tasks: tasks/install_helm.yml
+    - name: Import Helm installation tasks
+      import_tasks: tasks/install_helm.yml
     
     - name: Import gtp5g installation tasks
       import_tasks: tasks/install_gtp5g.yml
+
+    - name: Import free5gc-helm installation tasks
+      import_tasks: tasks/install_free5gc.yml
+  handlers:
+    - import_tasks: handlers/main.yml

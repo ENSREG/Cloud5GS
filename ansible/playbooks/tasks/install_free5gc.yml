@@ -1,0 +1,82 @@
+---
+- name: Clone free5gc-helm repository
+  become: no
+  git:
+    repo: https://github.com/free5gc/free5gc-helm.git
+    dest: /home/{{ ansible_user }}/cloud5gc/free5gc-helm
+    force: yes
+  register: git_clone_result
+
+- name: Create dummy interfaces for network interfaces
+  become: yes
+  shell: |
+    for iface in n2dummy n3dummy n4dummy n6dummy n9dummy; do
+      if ! ip link show $iface >/dev/null 2>&1; then
+        ip link add $iface type dummy
+        ip link set $iface up
+      fi
+    done
+  args:
+    executable: /bin/bash
+
+- name: Create network interface configuration for systemd-networkd
+  become: yes
+  copy:
+    dest: "/etc/systemd/network/{{ item }}.netdev"
+    content: |
+      [NetDev]
+      Name={{ item }}
+      Kind=dummy
+    mode: '0644'
+  loop:
+    - n2dummy
+    - n3dummy
+    - n4dummy
+    - n6dummy
+    - n9dummy
+  notify: restart systemd-networkd
+
+- name: Create custom values.yaml for free5gc helm chart
+  become: no
+  copy:
+    dest: /home/{{ ansible_user }}/cloud5gc/free5gc-helm/custom-values.yaml
+    content: |
+      global:
+        n2network:
+          masterIf: n2dummy
+        n3network:
+          masterIf: n3dummy
+        n4network:
+          masterIf: n4dummy
+        n6network:
+          masterIf: n6dummy
+        n9network:
+          masterIf: n9dummy
+    mode: '0644'
+
+- name: Add kubectl alias for microk8s kubectl in user's bashrc
+  become: no
+  lineinfile:
+    path: /home/{{ ansible_user }}/.bashrc
+    line: "alias kubectl='microk8s kubectl'"
+    state: present
+    regexp: "^alias kubectl="
+
+- name: Make kubectl alias immediately available in current session
+  become: no
+  shell: |
+    echo "alias kubectl='microk8s kubectl'" >> ~/.bash_aliases
+    source ~/.bash_aliases
+  args:
+    executable: /bin/bash
+
+- name: Install free5gc using Helm
+  become: no
+  kubernetes.core.helm:
+    name: free5gc
+    chart_ref: /home/{{ ansible_user }}/cloud5gc/free5gc-helm/charts/free5gc
+    values_files:
+      - /home/{{ ansible_user }}/cloud5gc/free5gc-helm/custom-values.yaml
+    release_namespace: default
+    wait: yes
+    timeout: 600s
